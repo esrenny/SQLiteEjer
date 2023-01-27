@@ -1,0 +1,58 @@
+#Creacuon de base de datos y tabla
+import sqlite3
+#creando conexion
+
+try:
+    conexion = sqlite3.connect("colegio.db")
+    cursor = conexion.cursor()
+
+    cursor.execute(""" CREATE TABLE alumno(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombre VARCHAR(32) NOT NULL,
+        apellidos VARCHAR(64) NOT NULL)""")
+
+except sqlite3.OperationalError:
+    print("Tabla alumnos ya existe")
+
+else:
+    print('Se ha creado exitosamente')
+
+conexion.close()
+
+conexion = sqlite3.connect("colegio.db")
+cursor = conexion.cursor()
+
+alumnos = [('Juan','Perez'),
+            ('Ramon','Graterol'),
+            ('Jose','Suarez'),
+            ('Angela','Mejias'),
+            ('Pedro','Mejias'),
+            ('Javier','Vivas'),
+            ('Karen','Davila'),
+            ('Enrique','Villegas')
+            ]
+cursor.executemany('INSERT INTO alumno VALUES (null,?,?)',alumnos)
+
+conexion.commit()
+conexion.close()
+
+#busqueda de nombre
+import sqlite3
+
+conexion = sqlite3.connect('colegio.db')
+
+busqueda = input('Ingrese el nombre del alumno: \n')
+
+cursor = conexion.cursor()
+
+cursor.execute('SELECT * FROM alumno WHERE nombre=?',(busqueda,))
+
+fila = cursor.fetchone()
+
+if fila != None:
+    print(fila)
+
+else:
+    print('No existe dicho nombre')
+
+conexion.close()
